@@ -78,7 +78,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'personal_portfolio.wsgi.application'
+WSGI_APPLICATION = 'personal_portfolio.wsgi.app' 
 
 
 # Database
@@ -165,7 +165,13 @@ STATICFILES_DIRS = [
 ]
 
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+if os.environ.get("VERCEL"):
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+
+    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
 
 
 
