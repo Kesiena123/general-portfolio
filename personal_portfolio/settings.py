@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 from dotenv import load_dotenv
-import dj_database_url
-
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,10 +21,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'y5hmuk*-4*%wor)ek2up+w+x!yx8l40j*n93#1zn!p66)k=c#2'
+dotenv_file = os.path.join (BASE_DIR, ".env")
+if os.path.isfile(dotenv_file):
+    load_dotenv(dotenv_file)
+
+
+
+
+SECRET_KEY = os.environ.get('SECRET_KEY')
+#SECRET_KEY = 'y5hmuk*-4*%wor)ek2up+w+x!yx8l40j*n93#1zn!p66)k=c#2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 #ALLOWED_HOSTS = ["*"]
 ALLOWED_HOSTS = ['.vercel.app','now.sh','127.0.0.1','localhost']
@@ -79,7 +85,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'personal_portfolio.wsgi.app' 
+WSGI_APPLICATION = 'personal_portfolio.wsgi.application' 
 
 
 # Database
@@ -105,14 +111,13 @@ WSGI_APPLICATION = 'personal_portfolio.wsgi.app'
 
 
 # Load environment variables from .env file
-load_dotenv(BASE_DIR / "secrets.env")
 
 # Database configuration
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': os.environ.get('ENGINE'),
         'HOST': os.environ.get('POSTGRES_HOST'),
-        'PORT': os.environ.get('POSTGRES_PORT'),
+        'PORT': os.environ.get('DATABASE_PORT'),
         'NAME': os.environ.get('POSTGRES_DATABASE'),
         'USER': os.environ.get('POSTGRES_USER'),
         'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
@@ -167,10 +172,10 @@ STATICFILES_DIRS = [
 
 
 #STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
-if os.environ.get("VERCEL"):
-    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
 
-    STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles_build', 'static')
+
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 
